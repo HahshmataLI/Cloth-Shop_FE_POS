@@ -1,0 +1,88 @@
+<div class="p-4">
+  <!-- Add button + search bar -->
+  <div class="flex justify-between items-center mb-3">
+    <!-- Search -->
+    <input pInputText type="text" placeholder="Search..."
+           class="w-1/3 p-2 border rounded-md"
+           (input)="dt.filterGlobal($event.target.value, 'contains')" />
+
+    <!-- Add button -->
+    <button 
+      class="px-4 py-2 rounded-lg text-white font-medium shadow-md 
+             bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90 flex items-center gap-2"
+      (click)="openDialog()">
+      <i class="pi pi-plus"></i>
+      Add SubCategory
+    </button>
+  </div>
+
+  <div class="border rounded-2xl shadow-md overflow-hidden">
+    <p-table #dt 
+         [value]="subCategories" 
+         [loading]="loading"
+         [paginator]="true"
+         [rows]="rows"
+         [first]="first"
+         paginatorDropdownAppendTo="body"
+         [totalRecords]="totalRecords"
+         [rowsPerPageOptions]="[10, 20, 30]"
+         (onPage)="onPageChange($event)"
+         [globalFilterFields]="['name', 'category.name']">
+
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
+          <th pSortableColumn="name" class="px-3 py-2">
+            SubCategory <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th class="px-3 py-2">Category</th>
+          <th class="px-3 py-2">Created At</th>
+          <th class="px-3 py-2">Updated At</th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template pTemplate="body" let-sub>
+        <tr>
+          <td class="px-3 py-2">{{ sub.name }}</td>
+          <td class="px-3 py-2">{{ sub.category?.name || 'N/A' }}</td>
+          <td class="px-3 py-2">{{ sub.createdAt | date:'short' }}</td>
+          <td class="px-3 py-2">{{ sub.updatedAt | date:'short' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Add/Edit Dialog -->
+  <p-dialog [(visible)]="displayDialog" header="SubCategory" [modal]="true" [style]="{width: '30vw'}">
+    <div class="flex flex-col gap-3">
+      <!-- SubCategory name -->
+      <input pInputText type="text" placeholder="SubCategory Name" 
+             [(ngModel)]="newSubCategory.name"
+             class="w-full p-2 border rounded-md" />
+
+      <!-- Category dropdown -->
+      <p-select 
+        [options]="categories" 
+        optionLabel="name" 
+        optionValue="_id" 
+        appendTo="body" 
+        [(ngModel)]="newSubCategory.category"
+        placeholder="Select Category"
+        class="w-full">
+      </p-select>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button class="px-4 py-2 rounded-lg text-gray-600 font-medium border hover:bg-gray-100"
+              (click)="displayDialog=false">
+        <i class="pi pi-times mr-2"></i> Cancel
+      </button>
+      <button class="px-4 py-2 rounded-lg text-white font-medium shadow-md 
+                     bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90"
+              (click)="saveSubCategory()">
+        <i class="pi pi-check mr-2"></i> Save
+      </button>
+    </ng-template>
+  </p-dialog>
+</div>

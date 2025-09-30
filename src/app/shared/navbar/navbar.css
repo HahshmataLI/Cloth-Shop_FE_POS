@@ -1,0 +1,19 @@
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0;
+  font-weight: 500;
+  color: #1e40af; /* blue-800 */
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+  background: #dbeafe; /* blue-100 */
+}
+
+.active-link {
+  background: #3b82f6; /* blue-500 */
+  color: white !important;
+}

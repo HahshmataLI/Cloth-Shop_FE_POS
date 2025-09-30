@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+@plugin "tailwindcss-primeui";
+:root {
+  --primary-color: #3b82f6;       /* Main theme color (Blue) */
+  --primary-color-text: #ffffff;  /* Text color on primary elements */
+  --primary-color-hover: #2563eb; /* Darker shade for hover states */
+  --primary-500: #3b82f6;         /* Match Tailwind blue-500 */
+}
+
+

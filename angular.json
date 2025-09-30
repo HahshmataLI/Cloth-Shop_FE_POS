@@ -22,24 +22,30 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+               {
+              "glob": "**/*",
+              "input": "src/assets",
+              "output": "/assets/"
+            }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+               "node_modules/ngx-toastr/toastr.css"
             ]
           },
           "configurations": {
             "production": {
-              "budgets": [
+                "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "2kB",
+                  "maximumError": "5mb"
                 }
               ],
               "outputHashing": "all"

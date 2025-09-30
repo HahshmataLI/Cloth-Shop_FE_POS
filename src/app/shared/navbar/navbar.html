@@ -1,0 +1,146 @@
+<!-- Top Navbar -->
+<div
+  class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white flex justify-between items-center px-4 h-14 shadow-md sticky top-0 z-50"
+>
+  <!-- Left -->
+  <div *ngIf="auth.isLoggedIn()">
+    <button
+      class="flex items-center gap-2 border border-white px-3 py-1 rounded hover:bg-white hover:text-blue-600 transition"
+      (click)="toggleSidebar()"
+    >
+      <i class="pi pi-bars"></i> Menu
+    </button>
+  </div>
+
+  <!-- Right -->
+  <div>
+    <ng-container *ngIf="auth.currentUser$ | async as user; else guest">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-medium">👋 {{ user.username }}</span>
+        <button
+          class="flex items-center gap-2 border border-white px-3 py-1 rounded hover:bg-white hover:text-blue-600 transition"
+          (click)="onLogout()"
+        >
+          <i class="pi pi-sign-out"></i> Logout
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #guest>
+      <button
+        class="flex items-center gap-2 border border-white px-3 py-1 rounded hover:bg-white hover:text-blue-600 transition"
+        routerLink="/login"
+        (click)="closeSidebar()"
+      >
+        <i class="pi pi-user"></i> Login
+      </button>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div
+  *ngIf="auth.isLoggedIn()"
+  class="fixed top-0 left-0 h-full w-60 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50"
+  [class.translate-x-0]="sidebarVisible"
+>
+  <!-- Sidebar Header -->
+  <div
+    class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-4 py-3 flex justify-between items-center rounded-tr-2xl"
+  >
+    <h4 class="font-bold">Am Boutique</h4>
+    <button (click)="toggleSidebar()" class="text-white text-lg">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <!-- Sidebar Links -->
+  <ul class="space-y-2 p-3" *ngIf="auth.currentUser$ | async as user">
+    <!-- Admin Only -->
+    <ng-container *ngIf="user.role === 'admin'">
+      <li>
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-home"></i> Dashboard</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/products"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-box"></i> Products</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/customers"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-list"></i> Customers</a
+        >
+      </li>
+    </ng-container>
+
+    <!-- Cashier + Admin -->
+    <ng-container *ngIf="user.role === 'admin' || user.role === 'cashier'">
+      <li>
+        <a
+          routerLink="/add-sale"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-shopping-cart"></i> Add Sale</a
+        >
+      </li>
+   <li>
+        <a
+          routerLink="/list-sale"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-list"></i> List Sale</a
+        >
+      </li>
+         <li>
+        <a
+          routerLink="/add-category"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-list"></i>  Categories</a
+        >
+      </li>
+       <li>
+        <a
+          routerLink="/sub-category"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-list"></i> Sub-Categories</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/suppliers"
+          routerLinkActive="active-link"
+          (click)="closeSidebar()"
+          class="nav-link"
+          ><i class="pi pi-list"></i> Suppliers</a
+        >
+      </li>
+    </ng-container>
+  </ul>
+</div>
+
+<!-- Overlay -->
+<div
+  *ngIf="sidebarVisible"
+  class="fixed inset-0 bg-black/40 z-40"
+  (click)="closeSidebar()"
+></div>
