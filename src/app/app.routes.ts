@@ -12,6 +12,8 @@ import { ProductForm } from './features/product-form/product-form';
 import { CustomerList } from './features/customers/customer-list/customer-list';
 import { Supplier } from './features/supplier/supplier';
 import { ListSale } from './features/sales/list-sale/list-sale';
+import { AddPurchase } from './features/purchase/add-purchase/add-purchase';
+import { ListPurchase } from './features/purchase/list-purchase/list-purchase';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,6 +23,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [roleGuard], data: { roles: ['admin'] } },
   { path: 'products', component: ProductList, canActivate: [roleGuard], data: { roles: ['admin'] } },
   { path: 'add-product', component: ProductForm, canActivate: [roleGuard], data: { roles: ['admin'] } },
+  { path: 'add-purchase', component: AddPurchase, canActivate: [roleGuard], data: { roles: ['admin'] } },
+  { path: 'list-purchase', component: ListPurchase, canActivate: [roleGuard], data: { roles: ['admin'] } },
   
   // { path: 'categories', component: Categories, canActivate: [roleGuard], data: { roles: ['admin'] } },
   { path: 'list-sale', component: ListSale, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },

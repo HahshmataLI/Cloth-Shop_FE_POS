@@ -1,0 +1,156 @@
+<div class="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl p-8">
+  <!-- Title -->
+  <h2 class="text-3xl font-bold text-blue-600 mb-8 text-center">
+    Add Purchase
+  </h2>
+
+  <!-- Form Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Supplier -->
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Supplier</label>
+      <p-select
+        [options]="suppliers"
+        optionLabel="name"
+        optionValue="_id"
+        appendTo="body"
+        [(ngModel)]="purchase.supplier"
+        placeholder="Select Supplier"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+      ></p-select>
+    </div>
+
+    <!-- Date -->
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Date</label>
+      <p-datepicker
+        [(ngModel)]="purchase.date"
+        dateFormat="dd/mm/yy"
+        class="w-full border border-gray-300 rounded-lg"
+      ></p-datepicker>
+    </div>
+
+    <!-- Payment Method -->
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Payment Method</label>
+      <p-select
+        [options]="paymentMethods"
+        appendTo="body"
+        [(ngModel)]="purchase.paymentMethod"
+        placeholder="Select Method"
+        class="w-full border border-gray-300 rounded-lg"
+      ></p-select>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-800 mb-3">Items</h3>
+    <div class="border rounded-xl overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
+          <tr>
+            <th class="p-2">Product</th>
+            <th class="p-2">Quantity</th>
+            <th class="p-2">Unit Cost</th>
+            <th class="p-2">Total</th>
+            <th class="p-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchase.items; let i = index" class="border-b">
+            <td class="p-2">
+              <p-select
+                [options]="products"
+                optionLabel="name"
+                appendTo="body"
+                optionValue="_id"
+                [(ngModel)]="item.product"
+                placeholder="Select Product"
+                class="w-full"
+              ></p-select>
+            </td>
+            <td class="p-2">
+              <input
+                type="number"
+                pInputText
+                [(ngModel)]="item.quantity"
+                (input)="updateTotals()"
+                class="w-full border rounded-lg px-2 py-1"
+              />
+            </td>
+            <td class="p-2">
+              <input
+                type="number"
+                pInputText
+                [(ngModel)]="item.unitCost"
+                (input)="updateTotals()"
+                class="w-full border rounded-lg px-2 py-1"
+              />
+            </td>
+            <td class="p-2">{{ item.quantity * item.unitCost | currency:'PKR' }}</td>
+            <td class="p-2 text-center">
+              <button
+                class="px-3 py-1 rounded bg-red-500 text-white"
+                (click)="removeItem(i)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Add Item Button -->
+    <button
+      class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+      (click)="addItem()"
+    >
+      + Add Item
+    </button>
+  </div>
+
+  <!-- Totals -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Subtotal</label>
+      <input
+        type="number"
+        [(ngModel)]="purchase.subTotal"
+        readonly
+        class="w-full border rounded-lg px-3 py-2 bg-gray-100"
+      />
+    </div>
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Tax</label>
+      <input
+        type="number"
+        [(ngModel)]="purchase.tax"
+        (input)="updateTotals()"
+        class="w-full border rounded-lg px-3 py-2"
+      />
+    </div>
+    <div>
+      <label class="block text-gray-700 mb-2 font-semibold">Grand Total</label>
+      <input
+        type="number"
+        [(ngModel)]="purchase.grandTotal"
+        readonly
+        class="w-full border rounded-lg px-3 py-2 bg-gray-100"
+      />
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="mt-10 text-center">
+    <button
+      pButton
+      label="Save Purchase"
+      class="px-8 py-3 rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-md"
+      (click)="savePurchase()"
+    >
+      Save Purchase
+    </button>
+  </div>
+</div>

@@ -15,6 +15,10 @@ import { SelectModule } from 'primeng/select';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
+import { CategoryService } from '../../../core/services/category';
+import { CategoriesModel } from '../../../core/Models/categoryModel.model';
+import { SubCategoryModel } from '../../../core/Models/sub-category.model';
+import { SubCategoryService } from '../../../core/services/sub-category';
 @Component({
   selector: 'app-add-sale',
   imports: [SelectModule,TableModule,DialogModule,ConfirmDialogModule,InputTextModule,ButtonModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -26,12 +30,19 @@ export class AddSale  implements OnInit , AfterViewInit {
   @ViewChild('skuInputEl') skuInputEl!: ElementRef;
 
   customers: CustomerModel[] = [];
+  categories: CategoriesModel[] = [];
+  subCategories: SubCategoryModel[] = [];
   products: ProductModel[] = [];
+  filteredProducts: ProductModel[] = [];
 
   // POS state
   selectedCustomer?: CustomerModel | null = null;
+  selectedCategory?: CategoriesModel | null = null;
+  selectedSubCategory?: SubCategoryModel | null = null;
+
   skuInput = '';
   saleItems: SaleItem[] = [];
+
   subTotal = 0;
   tax = 0;
   grandTotal = 0;
@@ -41,6 +52,8 @@ export class AddSale  implements OnInit , AfterViewInit {
 
   constructor(
     private customerService: CustomerService,
+    private categoryService: CategoryService,
+    private subCategoryService: SubCategoryService,
     private productService: ProductService,
     private saleService: SaleService,
     private toastr: ToastrService
@@ -51,19 +64,44 @@ export class AddSale  implements OnInit , AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Autofocus SKU input when component loads
     this.focusSkuInput();
   }
 
-  focusSkuInput() {
+  private focusSkuInput() {
     setTimeout(() => this.skuInputEl?.nativeElement.focus(), 100);
   }
 
-  loadData() {
-    this.customerService.getCustomers().subscribe(res => this.customers = res);
-    this.productService.getProducts().subscribe(res => this.products = res);
+  private loadData() {
+    // Load customers and set default "Walk-in Customer"
+    this.customerService.getCustomers().subscribe(res => {
+      this.customers = res;
+      this.selectedCustomer = this.customers.find(c => c.name.toLowerCase().includes('walk')) || null;
+    });
+
+    // Load categories
+    this.categoryService.getCategories().subscribe(res => {
+      this.categories = res;
+    });
   }
 
+  selectCategory(category: CategoriesModel) {
+    this.selectedCategory = category;
+    this.selectedSubCategory = null;
+    this.filteredProducts = [];
+    this.subCategoryService.getSubCategoriesByCategory(category._id!).subscribe(res => {
+      this.subCategories = res;
+    });
+  }
+
+  selectSubCategory(subCat: SubCategoryModel) {
+    this.selectedSubCategory = subCat;
+    this.productService.getProducts().subscribe(res => {
+      this.products = res;
+      this.filteredProducts = this.products.filter(
+        p => p.subcategory?._id === subCat._id
+      );
+    });
+  }
   addProduct(product: ProductModel) {
     const existing = this.saleItems.find(i => i.product._id === product._id);
     if (existing) {

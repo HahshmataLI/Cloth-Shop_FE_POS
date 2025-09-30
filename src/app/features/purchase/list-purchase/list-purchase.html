@@ -1,0 +1,81 @@
+<div class="p-4">
+  <!-- Top Bar -->
+  <div class="flex justify-between items-center mb-3">
+    <!-- Search -->
+    <div class="w-1/3">
+       <input 
+    pInputText 
+    type="text" 
+    placeholder="Search purchases..."
+    class="w-full p-2 border rounded-md"
+    [(ngModel)]="searchText"
+    (input)="onSearchChange()" />
+    </div>
+
+    <!-- Add Button -->
+    <button 
+      class="px-4 py-2 rounded-lg text-white font-medium shadow-md 
+             bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90 flex items-center gap-2"
+      routerLink="/add-purchase">
+      <i class="pi pi-plus"></i>
+      Add Purchase
+    </button>
+  </div>
+
+  <!-- Purchases Table -->
+  <div class="border rounded-2xl shadow-md overflow-hidden">
+    <p-table 
+      [value]="filteredPurchases"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="rows"
+      [first]="first"
+      paginatorDropdownAppendTo="body"
+      [rowsPerPageOptions]="[5,10,20]"
+      (onPage)="onPageChange($event)"
+      class="w-full">
+
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
+          <th>Invoice</th>
+          <th>Supplier</th>
+          <th>Date</th>
+          <th>Grand Total</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template pTemplate="body" let-purchase>
+        <tr>
+          <td class="px-3 py-2">{{ purchase.invoiceNumber }}</td>
+          <td class="px-3 py-2">{{ purchase.supplier?.name }}</td>
+          <td class="px-3 py-2">{{ purchase.date | date:'dd/MM/yyyy' }}</td>
+          <td class="px-3 py-2">{{ purchase.grandTotal | currency:'PKR' }}</td>
+          <td class="text-center px-3 py-2 flex justify-center gap-2">
+            <!-- Edit -->
+            <button 
+              class="px-2.5 py-1.5 rounded-md text-white shadow-sm 
+                bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90
+                flex items-center justify-center text-sm"
+              (click)="openDialog(purchase)">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <!-- Delete -->
+            <button 
+              class="px-2.5 py-1.5 rounded-md text-white shadow-sm 
+                bg-gradient-to-r from-red-500 to-pink-500 hover:opacity-90
+                flex items-center justify-center text-sm"
+              (click)="confirmDelete(purchase)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <p-confirmDialog></p-confirmDialog>
+</div>

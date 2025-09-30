@@ -5,7 +5,7 @@ export interface ProductModel {
   name: string;
 
  category: { _id: string; name: string };
-  subcategory?: string;
+   subcategory?: { _id: string; name: string };
 
   brand?: string;
   size?: string;
