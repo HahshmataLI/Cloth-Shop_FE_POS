@@ -15,7 +15,7 @@ export interface SaleModel {
   invoiceNumber?: string;
   date?: string | Date;
   cashier?: string; // can be user id
-  customer: string; // customer id
+  customer: CustomerModel; // customer id
   items: Array<{
     product: string;
     sku?: string;

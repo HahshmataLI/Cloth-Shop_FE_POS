@@ -19,6 +19,7 @@ import { CategoryService } from '../../../core/services/category';
 import { CategoriesModel } from '../../../core/Models/categoryModel.model';
 import { SubCategoryModel } from '../../../core/Models/sub-category.model';
 import { SubCategoryService } from '../../../core/services/sub-category';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-sale',
   imports: [SelectModule,TableModule,DialogModule,ConfirmDialogModule,InputTextModule,ButtonModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -56,7 +57,8 @@ export class AddSale  implements OnInit , AfterViewInit {
     private subCategoryService: SubCategoryService,
     private productService: ProductService,
     private saleService: SaleService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -190,7 +192,7 @@ export class AddSale  implements OnInit , AfterViewInit {
     const salePayload: SaleModel = {
       invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
       date: new Date(),
-      customer: this.selectedCustomer._id!,
+       customer: this.selectedCustomer,
       items: itemsPayload,
       subTotal: Number(this.subTotal.toFixed(2)),
       tax: Number(this.tax),
@@ -214,7 +216,39 @@ export class AddSale  implements OnInit , AfterViewInit {
       }
     });
   }
+printInvoice() {
+  if (!this.selectedCustomer || this.saleItems.length === 0) {
+    this.toastr.warning('Please complete the sale first!');
+    return;
+  }
 
+  // Generate payload just like saveSale
+  const itemsPayload = this.saleItems.map(it => ({
+    product: it.product._id!,
+    sku: it.product.sku,
+    name: it.product.name,
+    quantity: it.quantity,
+    unitPrice: it.price,
+    discount: it.discount ?? 0,
+    total: Number((it.subtotal).toFixed(2))
+  }));
+
+  const salePayload: SaleModel = {
+    invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
+    date: new Date(),
+    customer: this.selectedCustomer,
+    items: itemsPayload,
+    subTotal: Number(this.subTotal.toFixed(2)),
+    tax: Number(this.tax),
+    grandTotal: Number(this.grandTotal.toFixed(2)),
+    paymentMethod: this.paymentMethod,
+    amountPaid: Number(this.amountPaid || 0),
+    changeDue: Number(this.changeDue || 0)
+  };
+
+  // Navigate to invoice preview page
+  this.router.navigate(['/invoice'], { state: { sale: salePayload } });
+}
   private playBeep() {
     const audio = new Audio('assets/beep.mp3'); // put beep.mp3 in assets/
     audio.play().catch(() => {});

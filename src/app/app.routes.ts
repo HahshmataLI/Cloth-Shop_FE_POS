@@ -14,6 +14,7 @@ import { Supplier } from './features/supplier/supplier';
 import { ListSale } from './features/sales/list-sale/list-sale';
 import { AddPurchase } from './features/purchase/add-purchase/add-purchase';
 import { ListPurchase } from './features/purchase/list-purchase/list-purchase';
+import { InvoiceComponent } from './features/sales/invoice-component/invoice-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,7 +29,9 @@ export const routes: Routes = [
   
   // { path: 'categories', component: Categories, canActivate: [roleGuard], data: { roles: ['admin'] } },
   { path: 'list-sale', component: ListSale, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
+  
   { path: 'add-sale', component: AddSale, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
+  { path: 'invoice', component: InvoiceComponent, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   { path: 'add-category', component: Categories, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   { path: 'customers', component: CustomerList, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   { path: 'suppliers', component: Supplier, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },

@@ -1,0 +1,9 @@
+
+@media print {
+  body { margin: 0; padding: 0; }
+  #invoice {
+    width: 80mm;
+    font-size: 12px;
+  }
+  button { display: none; }
+}

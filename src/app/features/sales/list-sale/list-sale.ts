@@ -69,12 +69,6 @@ export class ListSale implements OnInit {
     this.rows = event.rows;
   }
 
-  viewInvoice(sale: SaleModel) {
-    // Navigate to invoice page
-    // Or open modal (you already have invoice component for thermal printer)
-    window.open(`/invoice/${sale._id}`, '_blank');
-  }
-
   editSale(sale: SaleModel) {
     // Navigate to AddSale with saleId for editing
     // Adjust your AddSale to support edit mode
@@ -89,6 +83,19 @@ export class ListSale implements OnInit {
       }
     });
   }
+viewInvoice(sale: SaleModel) {
+  window.open(`/invoice/${sale._id}`, '_blank');
+}
+
+printInvoice(sale: SaleModel) {
+  // Redirect to invoice with print flag
+  window.open(`/invoice/${sale._id}?print=true`, '_blank');
+}
+
+downloadPdf(sale: SaleModel) {
+  // later we’ll integrate jsPDF/pdfMake here
+  this.toastr.info('PDF download feature coming soon');
+}
 
   deleteSale(id: string) {
     this.saleService.deleteSale(id).subscribe({

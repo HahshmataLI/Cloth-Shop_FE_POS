@@ -1,0 +1,54 @@
+<div id="invoice" class="w-[80mm] mx-auto p-3 text-sm font-sans border">
+
+  <!-- Header -->
+  <div class="text-center mb-3">
+    <h2 class="font-bold text-lg">SwiftPlay Cloth Shop</h2>
+    <p>A Name of Trust</p>
+    <p>Plot A-1502, Phase 1 Karachi</p>
+    <p>0344-1358101</p>
+    <h3 class="border-t border-b my-2 py-1 font-semibold">Invoice</h3>
+  </div>
+
+  <!-- Invoice Info -->
+  <div class="mb-2">
+    <p><b>Invoice #:</b> {{ sale.invoiceNumber }}</p>
+    <p><b>Date:</b> {{ sale.date | date:'short' }}</p>
+    <p><b>Customer:</b> {{ sale.customer }}</p>
+    <p><b>Payment:</b> {{ sale.paymentMethod }}</p>
+  </div>
+
+  <!-- Items Table -->
+  <table class="w-full text-xs border-t border-b mb-2">
+    <thead>
+      <tr class="border-b">
+        <th class="text-left py-1">Product</th>
+        <th class="text-right py-1">Qty</th>
+        <th class="text-right py-1">Price</th>
+        <th class="text-right py-1">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of sale.items" class="border-b">
+        <td>{{ item.name }}</td>
+        <td class="text-right">{{ item.quantity }}</td>
+        <td class="text-right">{{ item.unitPrice }}</td>
+        <td class="text-right">{{ item.total }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Totals -->
+  <div class="text-right text-sm space-y-1">
+    <p>Subtotal: <b>{{ sale.subTotal }}</b></p>
+    <p>Tax: <b>{{ sale.tax }}</b></p>
+    <p class="text-base">Grand Total: <b>{{ sale.grandTotal }}</b></p>
+    <p>Paid: <b>{{ sale.amountPaid }}</b></p>
+    <p>Change: <b>{{ sale.changeDue }}</b></p>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center mt-3">
+    <p>SaleMan: Asif</p>
+    <button class="mt-2 px-4 py-2 border bg-black text-white" (click)="print()">🖨 Print</button>
+  </div>
+</div>
