@@ -1,31 +1,25 @@
-// sale.model.ts
-import { CustomerModel } from './customer.model';
-import { ProductModel } from './product.model';
+import { CustomerModel } from "./customer.model";
+import { ProductModel } from "./product.model";
 
 export interface SaleItem {
-  product: ProductModel;
+  product: ProductModel | string;  // sometimes populated, sometimes just id
+  sku?: string;
+  name?: string;
   quantity: number;
-  price: number;      // snapshot of salePrice
+  unitPrice: number;
   discount?: number;
-  subtotal: number;
+  total: number;
 }
 
 export interface SaleModel {
   _id?: string;
   invoiceNumber?: string;
   date?: string | Date;
-  cashier?: string; // can be user id
-  customer: CustomerModel; // customer id
-  items: Array<{
-    product: string;
-    sku?: string;
-    name?: string;
-    quantity: number;
-    unitPrice: number;
-    discount?: number;
-    total: number;
-  }>;
+  cashier?: string;
+  customer: CustomerModel | string; // sometimes populated
+  items: SaleItem[];
   subTotal: number;
+   discount?: number;   // ✅ exists here
   tax: number;
   grandTotal: number;
   paymentMethod: 'Cash'|'Card'|'JazzCash'|'Easypaisa'|'BankTransfer'|'Credit';

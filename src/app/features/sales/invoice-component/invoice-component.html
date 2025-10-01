@@ -1,54 +1,82 @@
-<div id="invoice" class="w-[80mm] mx-auto p-3 text-sm font-sans border">
+<div *ngIf="loading" class="p-4 text-center">Loading invoice...</div>
 
+<div *ngIf="!loading && sale" class="invoice-container">
   <!-- Header -->
-  <div class="text-center mb-3">
-    <h2 class="font-bold text-lg">SwiftPlay Cloth Shop</h2>
-    <p>A Name of Trust</p>
-    <p>Plot A-1502, Phase 1 Karachi</p>
-    <p>0344-1358101</p>
-    <h3 class="border-t border-b my-2 py-1 font-semibold">Invoice</h3>
+  <div class="text-center mb-2">
+    <img src="assets/logo.png" alt="Logo" class="mx-auto w-16 h-16" />
+    <h2 class="font-bold text-lg">Your Shop Name</h2>
+    <p class="text-xs">A NAME OF TRUST</p>
+    <p class="text-xs">Plot # A-1502, Karachi, Sindh</p>
+    <p class="text-xs">0344-1358101</p>
   </div>
 
-  <!-- Invoice Info -->
-  <div class="mb-2">
-    <p><b>Invoice #:</b> {{ sale.invoiceNumber }}</p>
-    <p><b>Date:</b> {{ sale.date | date:'short' }}</p>
-    <p><b>Customer:</b> {{ sale.customer }}</p>
-    <p><b>Payment:</b> {{ sale.paymentMethod }}</p>
+  <hr class="my-2" />
+
+  <div class="text-center font-bold underline mb-2">Bill / Invoice</div>
+
+  <!-- Bill Info -->
+  <div class="text-xs mb-2">
+    <div class="flex justify-between">
+      <span>Bill No: {{ sale._id | slice:-6 }}</span>
+      <span>Date: {{ sale.date | date:'dd-MMM-yyyy' }}</span>
+    </div>
+    <div>Customer: {{ getCustomerName() }}</div>
+    <div>Address: {{ getCustomerAddress() }}</div>
+    <div>Mobile: {{ getCustomerPhone() }}</div>
   </div>
 
   <!-- Items Table -->
-  <table class="w-full text-xs border-t border-b mb-2">
+  <table class="w-full text-xs border mb-2">
     <thead>
       <tr class="border-b">
-        <th class="text-left py-1">Product</th>
-        <th class="text-right py-1">Qty</th>
-        <th class="text-right py-1">Price</th>
-        <th class="text-right py-1">Total</th>
+        <th class="p-1 text-left">Product</th>
+        <th class="p-1">Qty</th>
+        <th class="p-1">Price</th>
+        <th class="p-1">Disc</th>
+        <th class="p-1 text-right">Total</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of sale.items" class="border-b">
-        <td>{{ item.name }}</td>
-        <td class="text-right">{{ item.quantity }}</td>
-        <td class="text-right">{{ item.unitPrice }}</td>
-        <td class="text-right">{{ item.total }}</td>
+        <td class="p-1">{{ getProductName(item) }}</td>
+        <td class="p-1 text-center">{{ item.quantity }}</td>
+        <td class="p-1 text-center">{{ item.unitPrice }}</td>
+        <td class="p-1 text-center">{{ item.discount || 0 }}</td>
+        <td class="p-1 text-right">{{ item.total | number:'1.2-2' }}</td>
       </tr>
     </tbody>
   </table>
 
   <!-- Totals -->
-  <div class="text-right text-sm space-y-1">
-    <p>Subtotal: <b>{{ sale.subTotal }}</b></p>
-    <p>Tax: <b>{{ sale.tax }}</b></p>
-    <p class="text-base">Grand Total: <b>{{ sale.grandTotal }}</b></p>
-    <p>Paid: <b>{{ sale.amountPaid }}</b></p>
-    <p>Change: <b>{{ sale.changeDue }}</b></p>
+  <div class="text-xs">
+    <div class="flex justify-between">
+      <span>Total Bill:</span>
+      <span>{{ sale.grandTotal | number:'1.2-2' }}</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Cash Received:</span>
+      <span>{{ sale.amountPaid | number:'1.2-2' }}</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Total Quantity:</span>
+      <span>{{ sale.items.length }}</span>
+    </div>
+    <div class="flex justify-between">
+      <span>Discount on Bill:</span>
+      <span>{{ sale.discount || 0 }}</span>
+    </div>
+    <div class="flex justify-between font-bold border-t mt-1 pt-1">
+      <span>Balance:</span>
+      <span>{{ sale.changeDue | number:'1.2-2' }}</span>
+    </div>
   </div>
 
-  <!-- Footer -->
-  <div class="text-center mt-3">
-    <p>SaleMan: Asif</p>
-    <button class="mt-2 px-4 py-2 border bg-black text-white" (click)="print()">🖨 Print</button>
+  <div class="mt-2 text-xs">
+    <p>Sale Man: {{ sale.cashier }}</p>
+  </div>
+
+  <div class="text-center text-[10px] mt-3">
+    Software By: <span class="font-semibold">gmtechnologies.pk</span>  
+    0300-1234567
   </div>
 </div>

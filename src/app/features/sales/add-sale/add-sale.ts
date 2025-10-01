@@ -20,6 +20,7 @@ import { CategoriesModel } from '../../../core/Models/categoryModel.model';
 import { SubCategoryModel } from '../../../core/Models/sub-category.model';
 import { SubCategoryService } from '../../../core/services/sub-category';
 import { Router } from '@angular/router';
+import { Auth } from '../../../core/services/auth';
 @Component({
   selector: 'app-add-sale',
   imports: [SelectModule,TableModule,DialogModule,ConfirmDialogModule,InputTextModule,ButtonModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -58,7 +59,8 @@ export class AddSale  implements OnInit , AfterViewInit {
     private productService: ProductService,
     private saleService: SaleService,
     private toastr: ToastrService,
-    private router: Router 
+    private router: Router,
+    private auth: Auth
   ) {}
 
   ngOnInit(): void {
@@ -104,19 +106,20 @@ export class AddSale  implements OnInit , AfterViewInit {
       );
     });
   }
+
   addProduct(product: ProductModel) {
-    const existing = this.saleItems.find(i => i.product._id === product._id);
+    const existing = this.saleItems.find(i => (i.product as ProductModel)._id === product._id);
     if (existing) {
       existing.quantity++;
-      existing.subtotal = existing.quantity * existing.price - (existing.discount ?? 0);
+      existing.total = (existing.quantity * existing.unitPrice) - (existing.discount ?? 0);
     } else {
       const price = product.salePrice ?? 0;
       this.saleItems.push({
         product,
         quantity: 1,
-        price,
+        unitPrice: price,
         discount: 0,
-        subtotal: price
+        total: price
       });
     }
     this.updateTotals();
@@ -147,7 +150,7 @@ export class AddSale  implements OnInit , AfterViewInit {
 
   updateQuantity(item: SaleItem, qty: number) {
     item.quantity = Math.max(1, qty || 1);
-    item.subtotal = (item.price * item.quantity) - (item.discount ?? 0);
+    item.total = (item.unitPrice * item.quantity) - (item.discount ?? 0);
     this.updateTotals();
   }
 
@@ -157,10 +160,9 @@ export class AddSale  implements OnInit , AfterViewInit {
   }
 
   updateTotals() {
-    this.subTotal = this.saleItems.reduce((s, it) => s + (it.subtotal), 0);
-    const taxPercent = 0;
-    const taxAmount = (this.subTotal * taxPercent) / 100;
-    this.grandTotal = this.subTotal + taxAmount;
+    this.subTotal = this.saleItems.reduce((s, it) => s + (it.total), 0);
+    this.tax = 0; // can fetch from backend config later
+    this.grandTotal = this.subTotal + this.tax;
     this.changeDue = Math.max(0, (this.amountPaid || 0) - this.grandTotal);
   }
 
@@ -179,20 +181,27 @@ export class AddSale  implements OnInit , AfterViewInit {
       return;
     }
 
+    const cashierId = this.auth.getUserId();
+    if (!cashierId) {
+      this.toastr.error('No cashier logged in');
+      return;
+    }
+
     const itemsPayload = this.saleItems.map(it => ({
-      product: it.product._id!,
-      sku: it.product.sku,
-      name: it.product.name,
+      product: (it.product as ProductModel)._id!,
+      sku: (it.product as ProductModel).sku,
+      name: (it.product as ProductModel).name,
       quantity: it.quantity,
-      unitPrice: it.price,
+      unitPrice: it.unitPrice,
       discount: it.discount ?? 0,
-      total: Number((it.subtotal).toFixed(2))
+      total: Number((it.total).toFixed(2))
     }));
 
     const salePayload: SaleModel = {
       invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
       date: new Date(),
-       customer: this.selectedCustomer,
+      cashier: cashierId,
+      customer: this.selectedCustomer._id!,
       items: itemsPayload,
       subTotal: Number(this.subTotal.toFixed(2)),
       tax: Number(this.tax),
@@ -205,38 +214,43 @@ export class AddSale  implements OnInit , AfterViewInit {
     this.saleService.createSale(salePayload).subscribe({
       next: () => {
         this.toastr.success('Sale saved successfully!');
-        this.saleItems = [];
-        this.subTotal = this.grandTotal = this.amountPaid = this.changeDue = 0;
-        this.selectedCustomer = null;
-        this.skuInput = '';
-        this.focusSkuInput();
+        this.resetForm();
       },
       error: (err) => {
         this.toastr.error(err?.error?.message || 'Failed to save sale');
       }
     });
   }
-printInvoice() {
-  if (!this.selectedCustomer || this.saleItems.length === 0) {
-    this.toastr.warning('Please complete the sale first!');
+saveAndPrint() {
+  if (!this.selectedCustomer || !this.selectedCustomer._id) {
+    this.toastr.warning('Please select a customer');
+    return;
+  }
+  if (this.saleItems.length === 0) {
+    this.toastr.warning('Add at least one product to the cart');
     return;
   }
 
-  // Generate payload just like saveSale
+  const cashierId = this.auth.getUserInfo()?._id;   // ✅ fix for getUserId
+  if (!cashierId) {
+    this.toastr.error('No cashier logged in');
+    return;
+  }
   const itemsPayload = this.saleItems.map(it => ({
-    product: it.product._id!,
-    sku: it.product.sku,
-    name: it.product.name,
+    product: (it.product as ProductModel)._id!,
+    sku: (it.product as ProductModel).sku,
+    name: (it.product as ProductModel).name,
     quantity: it.quantity,
-    unitPrice: it.price,
+    unitPrice: it.unitPrice,
     discount: it.discount ?? 0,
-    total: Number((it.subtotal).toFixed(2))
+    total: Number((it.total).toFixed(2))
   }));
 
   const salePayload: SaleModel = {
     invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
     date: new Date(),
-    customer: this.selectedCustomer,
+    cashier: cashierId,
+    customer: this.selectedCustomer._id!,
     items: itemsPayload,
     subTotal: Number(this.subTotal.toFixed(2)),
     tax: Number(this.tax),
@@ -246,11 +260,61 @@ printInvoice() {
     changeDue: Number(this.changeDue || 0)
   };
 
-  // Navigate to invoice preview page
-  this.router.navigate(['/invoice'], { state: { sale: salePayload } });
+  this.saleService.createSale(salePayload).subscribe({
+    next: (res) => {
+      this.toastr.success('Sale saved successfully!');
+      this.resetForm();
+
+      // ✅ redirect to invoice page
+      this.router.navigate(['/invoice', res._id]);
+    },
+    error: (err) => {
+      this.toastr.error(err?.error?.message || 'Failed to save sale');
+    }
+  });
 }
+
+  printInvoice() {
+    if (!this.selectedCustomer || this.saleItems.length === 0) {
+      this.toastr.warning('Please complete the sale first!');
+      return;
+    }
+
+    const salePayload: SaleModel = {
+      invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
+      date: new Date(),
+      cashier: this.auth.getUserId()!,
+      customer: this.selectedCustomer._id!,
+      items: this.saleItems.map(it => ({
+        product: (it.product as ProductModel)._id!,
+        sku: (it.product as ProductModel).sku,
+        name: (it.product as ProductModel).name,
+        quantity: it.quantity,
+        unitPrice: it.unitPrice,
+        discount: it.discount ?? 0,
+        total: Number((it.total).toFixed(2))
+      })),
+      subTotal: this.subTotal,
+      tax: this.tax,
+      grandTotal: this.grandTotal,
+      paymentMethod: this.paymentMethod,
+      amountPaid: this.amountPaid,
+      changeDue: this.changeDue
+    };
+
+    this.router.navigate(['/invoice'], { state: { sale: salePayload } });
+  }
+
+  private resetForm() {
+    this.saleItems = [];
+    this.subTotal = this.grandTotal = this.amountPaid = this.changeDue = 0;
+    this.selectedCustomer = null;
+    this.skuInput = '';
+    this.focusSkuInput();
+  }
+
   private playBeep() {
-    const audio = new Audio('assets/beep.mp3'); // put beep.mp3 in assets/
+    const audio = new Audio('assets/beep.mp3');
     audio.play().catch(() => {});
   }
 }

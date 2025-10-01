@@ -31,7 +31,12 @@ export const routes: Routes = [
   { path: 'list-sale', component: ListSale, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   
   { path: 'add-sale', component: AddSale, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
-  { path: 'invoice', component: InvoiceComponent, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
+{ 
+  path: 'invoice/:id', 
+  component: InvoiceComponent, 
+  canActivate: [roleGuard], 
+  data: { roles: ['cashier', 'admin'] } 
+},
   { path: 'add-category', component: Categories, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   { path: 'customers', component: CustomerList, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },
   { path: 'suppliers', component: Supplier, canActivate: [roleGuard], data: { roles: ['cashier', 'admin'] } },

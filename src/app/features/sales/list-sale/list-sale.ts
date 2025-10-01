@@ -88,7 +88,6 @@ viewInvoice(sale: SaleModel) {
 }
 
 printInvoice(sale: SaleModel) {
-  // Redirect to invoice with print flag
   window.open(`/invoice/${sale._id}?print=true`, '_blank');
 }
 

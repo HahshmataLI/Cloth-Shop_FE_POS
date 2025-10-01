@@ -85,6 +85,9 @@ export class Auth {
   getUserRole() {
     return this.currentUserSubject.value?.role ?? null;
   }
+getUserId(): string | null {
+  return this.currentUserSubject.value?._id ?? null;
+}
 
   getUserInfo() {
     return this.currentUserSubject.value;

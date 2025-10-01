@@ -1,9 +1,23 @@
+/* invoice.component.css */
+.invoice-container {
+  width: 300px; /* thermal printer size */
+  font-family: "Courier New", monospace;
+  margin: auto;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #000;
+}
 
 @media print {
-  body { margin: 0; padding: 0; }
-  #invoice {
-    width: 80mm;
-    font-size: 12px;
+  body * {
+    visibility: hidden;
   }
-  button { display: none; }
+  .invoice-container, .invoice-container * {
+    visibility: visible;
+  }
+  .invoice-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }
