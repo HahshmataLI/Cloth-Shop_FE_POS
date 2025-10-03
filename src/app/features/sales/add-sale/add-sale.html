@@ -88,6 +88,7 @@
         <th>Product</th>
         <th>Price</th>
         <th>Qty</th>
+        <th>Stock</th>
         <th>Discount</th>
         <th>Subtotal</th>
         <th></th>
@@ -97,18 +98,26 @@
     <ng-template pTemplate="body" let-item let-i="rowIndex">
       <tr>
         <td>{{ item.product.name }}</td>
-        <td>{{ item.price | currency:'PKR' }}</td>
+        <td>{{ item.unitPrice | currency:'PKR' }}</td>
         <td>
           <input type="number" min="1" class="w-20 p-1 border rounded"
                  [(ngModel)]="item.quantity"
                  (ngModelChange)="updateQuantity(item, $event)" />
         </td>
+         <td
+    [ngClass]="{
+      'text-red-600 font-bold': getStockQuantity(item) === 0,
+      'text-orange-500': getStockQuantity(item) > 0 && getStockQuantity(item) <= 5
+    }"
+  >
+    {{ getStockQuantity(item) }}
+  </td>
         <td>
           <input type="number" min="0" class="w-20 p-1 border rounded"
                  [(ngModel)]="item.discount"
                  (ngModelChange)="updateQuantity(item, item.quantity)" />
         </td>
-        <td>{{ item.subtotal | currency:'PKR' }}</td>
+        <td>{{ item.total | currency:'PKR' }}</td>
         <td>
           <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeItem(i)"></button>
         </td>

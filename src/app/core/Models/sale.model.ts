@@ -15,7 +15,7 @@ export interface SaleModel {
   _id?: string;
   invoiceNumber?: string;
   date?: string | Date;
-  cashier?: string;
+  cashier?: { _id: string; username: string; email: string } | string; 
   customer: CustomerModel | string; // sometimes populated
   items: SaleItem[];
   subTotal: number;

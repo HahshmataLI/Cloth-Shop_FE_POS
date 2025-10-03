@@ -1,82 +1,91 @@
-<div *ngIf="loading" class="p-4 text-center">Loading invoice...</div>
+<div id="invoice">
+  <div *ngIf="loading" class="p-4 text-center">Loading invoice...</div>
 
-<div *ngIf="!loading && sale" class="invoice-container">
-  <!-- Header -->
-  <div class="text-center mb-2">
-    <img src="assets/logo.png" alt="Logo" class="mx-auto w-16 h-16" />
-    <h2 class="font-bold text-lg">Your Shop Name</h2>
-    <p class="text-xs">A NAME OF TRUST</p>
-    <p class="text-xs">Plot # A-1502, Karachi, Sindh</p>
-    <p class="text-xs">0344-1358101</p>
-  </div>
-
-  <hr class="my-2" />
-
-  <div class="text-center font-bold underline mb-2">Bill / Invoice</div>
-
-  <!-- Bill Info -->
-  <div class="text-xs mb-2">
-    <div class="flex justify-between">
-      <span>Bill No: {{ sale._id | slice:-6 }}</span>
-      <span>Date: {{ sale.date | date:'dd-MMM-yyyy' }}</span>
+  <div *ngIf="!loading && sale" class="invoice-container">
+    <!-- Header -->
+    <div class="text-center mb-2">
+      <img src="assets/logo.png" alt="Logo" class="mx-auto w-12 h-12" />
+      <h2 class="font-bold text-base">Your Shop Name</h2>
+      <p class="text-xs">A NAME OF TRUST</p>
+      <p class="text-xs">Plot # A-1502, Karachi, Sindh</p>
+      <p class="text-xs">0344-1358101</p>
     </div>
-    <div>Customer: {{ getCustomerName() }}</div>
-    <div>Address: {{ getCustomerAddress() }}</div>
-    <div>Mobile: {{ getCustomerPhone() }}</div>
-  </div>
 
-  <!-- Items Table -->
-  <table class="w-full text-xs border mb-2">
-    <thead>
-      <tr class="border-b">
-        <th class="p-1 text-left">Product</th>
-        <th class="p-1">Qty</th>
-        <th class="p-1">Price</th>
-        <th class="p-1">Disc</th>
-        <th class="p-1 text-right">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of sale.items" class="border-b">
-        <td class="p-1">{{ getProductName(item) }}</td>
-        <td class="p-1 text-center">{{ item.quantity }}</td>
-        <td class="p-1 text-center">{{ item.unitPrice }}</td>
-        <td class="p-1 text-center">{{ item.discount || 0 }}</td>
-        <td class="p-1 text-right">{{ item.total | number:'1.2-2' }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="text-center font-bold underline mb-2">Bill / Invoice</div>
 
-  <!-- Totals -->
-  <div class="text-xs">
-    <div class="flex justify-between">
-      <span>Total Bill:</span>
-      <span>{{ sale.grandTotal | number:'1.2-2' }}</span>
+    <!-- Bill Info -->
+    <div class="text-xs mb-2">
+      <div class="flex justify-between">
+        <span>Bill No: {{ sale._id | slice:-6 }}</span>
+        <span>Date: {{ sale.date | date:'dd-MMM-yyyy' }}</span>
+      </div>
+      <div>Customer: {{ getCustomerName() }}</div>
+      <div>Address: {{ getCustomerAddress() }}</div>
+      <div>Mobile: {{ getCustomerPhone() }}</div>
     </div>
-    <div class="flex justify-between">
-      <span>Cash Received:</span>
-      <span>{{ sale.amountPaid | number:'1.2-2' }}</span>
-    </div>
-    <div class="flex justify-between">
-      <span>Total Quantity:</span>
-      <span>{{ sale.items.length }}</span>
-    </div>
-    <div class="flex justify-between">
-      <span>Discount on Bill:</span>
-      <span>{{ sale.discount || 0 }}</span>
-    </div>
-    <div class="flex justify-between font-bold border-t mt-1 pt-1">
-      <span>Balance:</span>
-      <span>{{ sale.changeDue | number:'1.2-2' }}</span>
-    </div>
-  </div>
 
-  <div class="mt-2 text-xs">
-    <p>Sale Man: {{ sale.cashier }}</p>
-  </div>
+    <!-- Items Table -->
+    <table class="text-xs mb-2">
+      <thead>
+        <tr>
+          <th class="text-left">Product</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Disc</th>
+          <th class="text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of sale.items">
+          <td>{{ getProductName(item) }}</td>
+          <td class="text-center">{{ item.quantity }}</td>
+          <td class="text-center">{{ item.unitPrice }}</td>
+          <td class="text-center">{{ item.discount || 0 }}</td>
+          <td class="text-right">{{ item.total | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div class="text-center text-[10px] mt-3">
-    Software By: <span class="font-semibold">gmtechnologies.pk</span>  
-    0300-1234567
+    <!-- Totals -->
+    <div class="text-xs">
+      <div class="flex justify-between">
+        <span>Total Bill:</span>
+        <span>{{ sale.grandTotal | number:'1.2-2' }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Cash Received:</span>
+        <span>{{ sale.amountPaid | number:'1.2-2' }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Total Quantity:</span>
+        <span>{{ sale.items.length }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Discount on Bill:</span>
+        <span>{{ sale.discount || 0 }}</span>
+      </div>
+      <div class="flex justify-between font-bold border-t mt-1 pt-1">
+        <span>Balance:</span>
+        <span>{{ sale.changeDue | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-2 text-xs">
+      <p>Sale Man: {{ getCashierName() }}</p>
+    </div>
+
+    <div class="text-center text-[10px] mt-3">
+      Software By: <span class="font-semibold">Hashmat Ali</span> 0319-5312100
+    </div>
+
+    <!-- Print Button (hidden in print) -->
+    <div class="text-center mt-3 no-print">
+      <button 
+        (click)="printInvoice()" 
+        class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:opacity-90">
+        <i class="pi pi-print mr-2"></i> Print Invoice
+      </button>
+    </div>
   </div>
 </div>

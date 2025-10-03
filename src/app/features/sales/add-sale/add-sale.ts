@@ -107,25 +107,30 @@ export class AddSale  implements OnInit , AfterViewInit {
     });
   }
 
-  addProduct(product: ProductModel) {
-    const existing = this.saleItems.find(i => (i.product as ProductModel)._id === product._id);
-    if (existing) {
-      existing.quantity++;
-      existing.total = (existing.quantity * existing.unitPrice) - (existing.discount ?? 0);
-    } else {
-      const price = product.salePrice ?? 0;
-      this.saleItems.push({
-        product,
-        quantity: 1,
-        unitPrice: price,
-        discount: 0,
-        total: price
-      });
-    }
-    this.updateTotals();
-    this.playBeep();
-    this.focusSkuInput();
+addProduct(product: ProductModel) {
+  const existing = this.saleItems.find(i => (i.product as ProductModel)._id === product._id);
+
+  const price = product.salePrice ?? product.purchasePrice ?? 0;  // ✅ fallback if salePrice missing
+
+  if (existing) {
+    existing.quantity++;
+    existing.unitPrice = price;   // ✅ ensure price updates
+    existing.total = (existing.quantity * existing.unitPrice) - (existing.discount ?? 0);
+  } else {
+    this.saleItems.push({
+      product,
+      quantity: 1,
+      unitPrice: price,
+      discount: 0,
+      total: price
+    });
   }
+
+  this.updateTotals();
+  this.playBeep();
+  this.focusSkuInput();
+}
+
 
   addBySku() {
     const sku = this.skuInput?.trim();
@@ -158,6 +163,12 @@ export class AddSale  implements OnInit , AfterViewInit {
     this.saleItems.splice(idx, 1);
     this.updateTotals();
   }
+getStockQuantity(item: any): number {
+  if (item.product && 'stockQuantity' in item.product) {
+    return (item.product as any).stockQuantity ?? 0;
+  }
+  return 0;
+}
 
   updateTotals() {
     this.subTotal = this.saleItems.reduce((s, it) => s + (it.total), 0);
@@ -259,19 +270,22 @@ saveAndPrint() {
     amountPaid: Number(this.amountPaid || 0),
     changeDue: Number(this.changeDue || 0)
   };
+this.saleService.createSale(salePayload).subscribe({
+  next: (res: any) => {
+    this.toastr.success('Sale saved successfully!');
+    this.resetForm();
 
-  this.saleService.createSale(salePayload).subscribe({
-    next: (res) => {
-      this.toastr.success('Sale saved successfully!');
-      this.resetForm();
-
-      // ✅ redirect to invoice page
-      this.router.navigate(['/invoice', res._id]);
-    },
-    error: (err) => {
-      this.toastr.error(err?.error?.message || 'Failed to save sale');
+    const saleId = res?.data?._id;  // ✅ get id from res.data
+    if (saleId) {
+      this.router.navigate(['/invoice', saleId]);
+    } else {
+      this.toastr.error('No invoice ID returned');
     }
-  });
+  },
+  error: (err) => {
+    this.toastr.error(err?.error?.message || 'Failed to save sale');
+  }
+});
 }
 
   printInvoice() {

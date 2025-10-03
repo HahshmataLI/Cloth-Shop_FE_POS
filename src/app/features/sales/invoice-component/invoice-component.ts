@@ -14,38 +14,13 @@ export class InvoiceComponent implements OnInit {
   sale: SaleModel | null = null;
   loading = true;
 
-  constructor(
-    private route: ActivatedRoute,
-    private saleService: SaleService
-  ) {}
+  constructor(private route: ActivatedRoute, private saleService: SaleService) {}
 
   ngOnInit(): void {
     const saleId = this.route.snapshot.paramMap.get('id');
-    if (saleId) {
-      this.loadInvoice(saleId);
-    }
+    if (saleId) this.loadInvoice(saleId);
   }
-getCustomerName(): string {
-  if (!this.sale) return '';
-  const customer = this.sale.customer as any;
-  return customer?.name || this.sale.customer.toString();
-}
 
-getProductName(item: any): string {
-  const product = item.product as any;
-  return product?.name || item.name || '';
-}
-getCustomerAddress(): string {
-  if (!this.sale) return '-';
-  const customer = this.sale.customer as any;
-  return customer?.address || '-';
-}
-
-getCustomerPhone(): string {
-  if (!this.sale) return '-';
-  const customer = this.sale.customer as any;
-  return customer?.phone || '-';
-}
   loadInvoice(id: string) {
     this.saleService.getSaleById(id).subscribe({
       next: (res) => {
@@ -57,5 +32,38 @@ getCustomerPhone(): string {
         this.loading = false;
       }
     });
+  }
+
+  getCustomerName(): string {
+    if (!this.sale) return '';
+    const customer = this.sale.customer as any;
+    return customer?.name || this.sale.customer.toString();
+  }
+
+  getCustomerAddress(): string {
+    if (!this.sale) return '-';
+    const customer = this.sale.customer as any;
+    return customer?.address || '-';
+  }
+
+  getCustomerPhone(): string {
+    if (!this.sale) return '-';
+    const customer = this.sale.customer as any;
+    return customer?.phone || '-';
+  }
+
+  getCashierName(): string {
+    if (!this.sale || !this.sale.cashier) return '-';
+    const cashier = this.sale.cashier as any;
+    return cashier?.username || cashier?.email || this.sale.cashier.toString();
+  }
+
+  getProductName(item: any): string {
+    const product = item.product as any;
+    return product?.name || item.name || '';
+  }
+
+  printInvoice() {
+    window.print();
   }
 }

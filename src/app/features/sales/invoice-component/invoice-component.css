@@ -1,23 +1,47 @@
-/* invoice.component.css */
+/* Invoice container for screen */
 .invoice-container {
-  width: 300px; /* thermal printer size */
+  width: 300px; /* ~80mm thermal roll */
   font-family: "Courier New", monospace;
   margin: auto;
   background: #fff;
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #000;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+/* Compact table styling */
+.invoice-container table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.invoice-container th,
+.invoice-container td {
+  border: 1px solid #000;
+  padding: 2px 4px;
+}
+
+/* Hide UI stuff when printing */
+.no-print {
+  display: block;
 }
 
 @media print {
   body * {
     visibility: hidden;
   }
-  .invoice-container, .invoice-container * {
+  #invoice, #invoice * {
     visibility: visible;
   }
-  .invoice-container {
+  #invoice {
     position: absolute;
     left: 0;
     top: 0;
+    width: 80mm;   /* thermal paper width */
+    border: none;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
   }
 }

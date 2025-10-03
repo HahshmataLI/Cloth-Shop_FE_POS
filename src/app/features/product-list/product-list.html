@@ -53,7 +53,22 @@
           <td class="px-3 py-2">{{ prod.sku }}</td>
           <td class="px-3 py-2">{{ prod.category?.name }}</td>
           <td class="px-3 py-2">{{ prod.salePrice | currency:'PKR' }}</td>
-          <td class="px-3 py-2">{{ prod.stockQuantity }}</td>
+         <td class="px-3 py-2">
+  <span 
+    [ngClass]="{
+      'bg-red-100 text-red-700 border-red-300': prod.stockQuantity === 0,
+      'bg-orange-100 text-orange-700 border-orange-300': prod.stockQuantity > 0 && prod.stockQuantity <= 5,
+      'bg-green-100 text-green-700 border-green-300': prod.stockQuantity > 5
+    }"
+    class="px-2 py-1 rounded-full text-xs font-medium border">
+    {{ prod.stockQuantity === 0 
+        ? 'Out of Stock' 
+        : prod.stockQuantity <= 5 
+          ? 'Low Stock (' + prod.stockQuantity + ')' 
+          : 'In Stock (' + prod.stockQuantity + ')' }}
+  </span>
+</td>
+
           <td class="text-center px-3 py-2 flex justify-center gap-2">
             <!-- Edit -->
             <button 
