@@ -71,11 +71,13 @@
 </td>
 
 <td class="px-3 py-2">
-  <img 
-    *ngIf="prod.images && prod.images.length > 0" 
-    [src]="prod.images[0].url" 
+   <img 
+    *ngIf="prod.images?.length > 0" 
+    [src]="getFullImageUrl(prod.images[0].url)" 
     alt="{{ prod.name }}" 
-    class="w-12 h-12 object-cover rounded-md border" />
+    width="48" height="48"
+    class="w-12 h-12 object-cover rounded-md border"
+  />
   <span *ngIf="!prod.images || prod.images.length === 0" class="text-gray-400 text-xs">
     No Image
   </span>

@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { RouterLink } from '@angular/router';
 import { ConfirmDialog } from "primeng/confirmdialog";
+import { API_BASE, FILE_BASE } from '../../core/constants';
 
 @Component({
   selector: 'app-product-list',
@@ -78,6 +79,11 @@ export class ProductList implements OnInit {
       }
     });
   }
+getFullImageUrl(url: string): string {
+  if (!url) return '';
+  return url.startsWith('http') ? url : `${FILE_BASE}${url}`;
+}
+
 
   private deleteProduct(id: string) {
     this.productService.deleteProduct(id).subscribe({
