@@ -9,10 +9,11 @@ import { supplierService } from '../../../core/services/supplier';
 import { PurchaseItem, PurchaseModel } from '../../../core/Models/purchase.model';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
+import { TableModule } from "primeng/table";
 
 @Component({
   selector: 'app-add-purchase',
-  imports: [DatePickerModule,SelectModule,CommonModule,FormsModule,ReactiveFormsModule],
+  imports: [DatePickerModule, SelectModule, CommonModule, FormsModule, ReactiveFormsModule, TableModule],
   templateUrl: './add-purchase.html',
   styleUrl: './add-purchase.css'
 })

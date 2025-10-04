@@ -13,6 +13,7 @@ import { TableModule } from 'primeng/table';
 import { RouterLink } from '@angular/router';
 import { ConfirmDialog } from "primeng/confirmdialog";
 import { API_BASE, FILE_BASE } from '../../core/constants';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-list',
@@ -42,7 +43,8 @@ export class ProductList implements OnInit {
   constructor(
     private productService: ProductService,
     private toastr: ToastrService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
