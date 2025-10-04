@@ -10,3 +10,22 @@
 }
 
 
+/* 📱 Mobile-only readability fix */
+@media (max-width: 768px) {
+  body, input, select, textarea, button, label, span, p, div, th, td {
+    color: #1f2937 !important;   /* dark gray (almost black) */
+    font-size: 15px !important;  /* readable size */
+  }
+
+  /* Dropdowns (Customer, Payment) */
+  select {
+    background-color: #fff !important;
+    color: #111 !important;
+  }
+
+  /* Placeholder visibility */
+  ::placeholder {
+    color: #6b7280 !important; /* gray-500 */
+    opacity: 1;
+  }
+}
