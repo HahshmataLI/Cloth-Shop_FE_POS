@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { ConfirmDialog } from "primeng/confirmdialog";
 import { SaleService } from '../../../core/services/sale-service';
 import { SaleModel } from '../../../core/Models/sale.model';
+import { PdfService } from '../../../core/services/pdf.service.ts';
 @Component({
   selector: 'app-list-sale',
   imports: [CommonModule,ButtonModule,DialogModule,SelectModule,InputTextModule,TableModule,RouterLink,ConfirmDialog],
@@ -33,7 +34,8 @@ export class ListSale implements OnInit {
   constructor(
     private saleService: SaleService,
     private confirm: ConfirmationService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private pdfService: PdfService
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +94,7 @@ printInvoice(sale: SaleModel) {
 }
 
 downloadPdf(sale: SaleModel) {
-  // later we’ll integrate jsPDF/pdfMake here
-  this.toastr.info('PDF download feature coming soon');
+  this.pdfService.generateInvoice(sale);
 }
 
   deleteSale(id: string) {
