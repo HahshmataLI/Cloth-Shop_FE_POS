@@ -1,6 +1,7 @@
 // export const API_BASE = 'http://localhost:5000/api/v1';
 export const API_BASE = 'https://am-boutique-0f0e746f58d5.herokuapp.com/api/v1';
-
+// export const FILE_BASE = 'http://localhost:5000';
+export const FILE_BASE = 'https://am-boutique-0f0e746f58d5.herokuapp.com';
 
 export const API_ENDPOINTS = {
   AUTH: {
