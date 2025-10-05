@@ -1,1 +1,73 @@
-<p>dashboard works!</p>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+  <!-- Sales Today -->
+  <p-card header="Today’s Sales" class="text-center">
+    <h2 class="text-2xl font-bold text-green-600">
+      Rs {{ stats?.todaySales | number }}
+    </h2>
+  </p-card>
+
+  <!-- Total Sales -->
+  <p-card header="Total Sales" class="text-center">
+    <h2 class="text-2xl font-bold">{{ stats?.totalSales | number }}</h2>
+  </p-card>
+
+  <!-- Total Revenue -->
+  <p-card header="Total Revenue" class="text-center">
+    <h2 class="text-2xl font-bold text-blue-600">
+      Rs {{ stats?.totalRevenue | number }}
+    </h2>
+  </p-card>
+
+  <!-- Total Purchases -->
+  <p-card header="Total Purchases" class="text-center">
+    <h2 class="text-2xl font-bold">{{ stats?.totalPurchases | number }}</h2>
+  </p-card>
+
+  <!-- Customers -->
+  <p-card header="Customers" class="text-center">
+    <h2 class="text-2xl font-bold">{{ stats?.totalCustomers }}</h2>
+  </p-card>
+
+  <!-- Suppliers -->
+  <p-card header="Suppliers" class="text-center">
+    <h2 class="text-2xl font-bold">{{ stats?.totalSuppliers }}</h2>
+  </p-card>
+
+  <!-- Products -->
+  <p-card header="Products" class="text-center">
+    <h2 class="text-2xl font-bold">{{ stats?.totalProducts }}</h2>
+  </p-card>
+
+  <!-- Low Stock -->
+  <p-card header="Low Stock Products" class="text-center">
+    <h2 class="text-2xl font-bold text-red-600">{{ stats?.lowStockProducts }}</h2>
+  </p-card>
+</div>
+
+<!-- Charts + Tables -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+  <!-- Weekly Sales -->
+  <p-card header="Weekly Sales Trend">
+    <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+  </p-card>
+
+  <!-- Top Products -->
+  <p-card header="Top 5 Products">
+    <p-table [value]="topProducts" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product</th>
+          <th>Quantity Sold</th>
+          <th>Total Sales (PKR)</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-prod>
+        <tr>
+          <td>{{ prod.name }}</td>
+          <td>{{ prod.totalQty }}</td>
+          <td>Rs {{ prod.totalSales | number }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
