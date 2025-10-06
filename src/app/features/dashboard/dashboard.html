@@ -1,91 +1,87 @@
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
-  <!-- Sales Today -->
-  <p-card header="Today’s Sales" class="text-center">
-    <h2 class="text-2xl font-bold text-green-600">
-      Rs {{ stats?.todaySales | number }}
-    </h2>
-  </p-card>
+<div class="p-6 bg-gray-50 min-h-screen">
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Card Example -->
+    <p-card class="dashboard-card" header="Today’s Sales">
+      <h2 class="kpi-value text-green-600">
+        Rs {{ stats?.todaySales | number }}
+      </h2>
+    </p-card>
 
-  <!-- Total Sales -->
-  <p-card header="Total Sales" class="text-center">
-    <h2 class="text-2xl font-bold">{{ stats?.totalSales | number }}</h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Total Sales">
+      <h2 class="kpi-value">{{ stats?.totalSales | number }}</h2>
+    </p-card>
 
-  <!-- Total Revenue -->
-  <p-card header="Total Revenue" class="text-center">
-    <h2 class="text-2xl font-bold text-blue-600">
-      Rs {{ stats?.totalRevenue | number }}
-    </h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Total Revenue">
+      <h2 class="kpi-value text-blue-600">
+        Rs {{ stats?.totalRevenue | number }}
+      </h2>
+    </p-card>
 
-  <!-- Total Purchases -->
-  <p-card header="Total Purchases" class="text-center">
-    <h2 class="text-2xl font-bold">{{ stats?.totalPurchases | number }}</h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Total Purchases">
+      <h2 class="kpi-value">{{ stats?.totalPurchases | number }}</h2>
+    </p-card>
 
-  <!-- Customers -->
-  <p-card header="Customers" class="text-center">
-    <h2 class="text-2xl font-bold">{{ stats?.totalCustomers }}</h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Customers">
+      <h2 class="kpi-value">{{ stats?.totalCustomers }}</h2>
+    </p-card>
 
-  <!-- Suppliers -->
-  <p-card header="Suppliers" class="text-center">
-    <h2 class="text-2xl font-bold">{{ stats?.totalSuppliers }}</h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Suppliers">
+      <h2 class="kpi-value">{{ stats?.totalSuppliers }}</h2>
+    </p-card>
 
-  <!-- Products -->
-  <p-card header="Products" class="text-center">
-    <h2 class="text-2xl font-bold">{{ stats?.totalProducts }}</h2>
-  </p-card>
+    <p-card class="dashboard-card" header="Products">
+      <h2 class="kpi-value">{{ stats?.totalProducts }}</h2>
+    </p-card>
 
-  <!-- Low Stock -->
-  <p-card header="Low Stock Products" class="text-center">
-    <h2 class="text-2xl font-bold text-red-600">{{ stats?.lowStockProducts }}</h2>
-  </p-card>
-  <!-- Profits Section -->
-  <p-card header="Total Profit" class="text-center">
-    <h2 class="text-2xl font-bold text-green-700">
-      Rs {{ stats?.totalProfit | number }}
-    </h2>
-  </p-card>
-  
-  <p-card header="Today’s Profit" class="text-center">
-    <h2 class="text-2xl font-bold text-green-600">
-      Rs {{ stats?.todayProfit | number }}
-    </h2>
-  </p-card>
-  
-  <p-card header="This Month’s Profit" class="text-center">
-    <h2 class="text-2xl font-bold text-green-500">
-      Rs {{ stats?.monthProfit | number }}
-    </h2>
-  </p-card>
-</div>
+    <p-card class="dashboard-card" header="Low Stock Products">
+      <h2 class="kpi-value text-red-600">{{ stats?.lowStockProducts }}</h2>
+    </p-card>
 
-<!-- Charts + Tables -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-  <!-- Weekly Sales -->
-  <p-card header="Weekly Sales Trend">
-    <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
-  </p-card>
+    <p-card class="dashboard-card" header="Total Profit">
+      <h2 class="kpi-value text-green-700">
+        Rs {{ stats?.totalProfit | number }}
+      </h2>
+    </p-card>
 
-  <!-- Top Products -->
-  <p-card header="Top 5 Products">
-    <p-table [value]="topProducts" styleClass="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Product</th>
-          <th>Quantity Sold</th>
-          <th>Total Sales (PKR)</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-prod>
-        <tr>
-          <td>{{ prod.name }}</td>
-          <td>{{ prod.totalQty }}</td>
-          <td>Rs {{ prod.totalSales | number }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+    <p-card class="dashboard-card" header="Today’s Profit">
+      <h2 class="kpi-value text-green-600">
+        Rs {{ stats?.todayProfit | number }}
+      </h2>
+    </p-card>
+
+    <p-card class="dashboard-card" header="This Month’s Profit">
+      <h2 class="kpi-value text-green-500">
+        Rs {{ stats?.monthProfit | number }}
+      </h2>
+    </p-card>
+  </div>
+
+  <!-- Charts + Tables -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Weekly Sales -->
+    <p-card class="dashboard-card" header="Weekly Sales Trend">
+      <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+    </p-card>
+
+    <!-- Top Products -->
+    <p-card class="dashboard-card" header="Top 5 Products">
+      <p-table [value]="topProducts" styleClass="p-datatable-sm p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Product</th>
+            <th>Quantity Sold</th>
+            <th>Total Sales (PKR)</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prod>
+          <tr>
+            <td>{{ prod.name }}</td>
+            <td>{{ prod.totalQty }}</td>
+            <td class="font-semibold text-blue-600">Rs {{ prod.totalSales | number }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
 </div>

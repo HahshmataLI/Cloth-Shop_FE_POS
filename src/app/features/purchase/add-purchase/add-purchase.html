@@ -125,9 +125,10 @@
 
   <!-- Add Item Button -->
   <button
-    class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 flex items-center gap-2"
+    class="mt-3 px-4 rounded-lg text-white font-medium shadow-md  py-2 bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90 flex items-center gap-2"
     (click)="addItem()"
   >
+             
     <i class="pi pi-plus"></i>
     Add Item
   </button>
@@ -170,7 +171,8 @@
     <button
       pButton
       label="Save Purchase"
-      class="px-8 py-3 rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-md"
+      class="px-4 py-2 rounded-lg text-white font-medium shadow-md 
+             bg-gradient-to-r from-blue-600 to-indigo-500 hover:opacity-90 flex items-center gap-2"
       (click)="savePurchase()"
     >
       Save Purchase

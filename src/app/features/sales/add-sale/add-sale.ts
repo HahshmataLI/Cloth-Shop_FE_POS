@@ -133,25 +133,27 @@ addProduct(product: ProductModel) {
 
 
   addBySku() {
-    const sku = this.skuInput?.trim();
-    if (!sku) return;
+  const sku = this.skuInput?.trim();
+  if (!sku) return;
 
-    this.productService.getProductBySku(sku).subscribe({
-      next: (p) => {
-        if (!p || !p._id) {
-          this.toastr.error('Product not found for SKU: ' + sku);
-          this.focusSkuInput();
-          return;
-        }
-        this.addProduct(p);
-        this.skuInput = '';
-      },
-      error: (err) => {
-        this.toastr.error(err?.error?.message || 'Failed to fetch product by SKU');
+  this.productService.getProductBySku(sku).subscribe({
+    next: (p) => {
+      if (!p || !p._id) {
+        this.toastr.error('Product not found for SKU: ' + sku);
         this.focusSkuInput();
+        return;
       }
-    });
-  }
+      this.addProduct(p);
+      this.playBeep();  // ✅ force play after scanning
+      this.skuInput = '';
+    },
+    error: (err) => {
+      this.toastr.error(err?.error?.message || 'Failed to fetch product by SKU');
+      this.focusSkuInput();
+    }
+  });
+}
+
 
   updateQuantity(item: SaleItem, qty: number) {
     item.quantity = Math.max(1, qty || 1);
@@ -319,16 +321,26 @@ this.saleService.createSale(salePayload).subscribe({
     this.router.navigate(['/invoice'], { state: { sale: salePayload } });
   }
 
-  private resetForm() {
-    this.saleItems = [];
-    this.subTotal = this.grandTotal = this.amountPaid = this.changeDue = 0;
-    this.selectedCustomer = null;
-    this.skuInput = '';
-    this.focusSkuInput();
-  }
+ private resetForm() {
+  this.saleItems = [];
+  this.subTotal = this.grandTotal = this.amountPaid = this.changeDue = 0;
+  this.skuInput = '';
+
+  // ✅ Keep Walk-in Customer selected
+  this.selectedCustomer =
+    this.customers.find(c => c.name.toLowerCase().includes('walk')) || null;
+
+  this.focusSkuInput();
+}
+triggerSkuScan() {
+  this.playBeep();  // ✅ beep on pressing enter (user gesture)
+  this.addBySku();  // then run your SKU lookup
+}
+
 
   private playBeep() {
-    const audio = new Audio('assets/beep.mp3');
+    const audio = new Audio('beep.mp3');
+
     audio.play().catch(() => {});
   }
 }

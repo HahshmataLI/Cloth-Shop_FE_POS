@@ -26,7 +26,7 @@
           (keyup.enter)="addBySku()"
           placeholder="Scan or type SKU then Enter"
           class="w-full" />
-        <button pButton label="Add" icon="pi pi-plus" (click)="addBySku()"></button>
+        <button pButton  (keydown.enter)="triggerSkuScan()"  label="Add" icon="pi pi-plus" (click)="addBySku()"></button>
       </div>
     </div>
 
@@ -48,14 +48,24 @@
 
     <!-- Categories -->
     <div class="flex gap-2 flex-wrap mb-3">
-      <button
+      <!-- <button
         *ngFor="let c of categories"
         class="px-3 py-2 rounded border"
         [class.bg-blue-600]="selectedCategory?._id === c._id"
         [class.text-white]="selectedCategory?._id === c._id"
         (click)="selectCategory(c)">
         {{ c.name }}
-      </button>
+      </button> -->
+      <button 
+      class="px-3 py-2 rounded border"
+      *ngFor="let c of categories"
+  pButton 
+  label="{{ c.name }}"
+  (click)="selectCategory(c)"
+  [class.p-button-outlined]="selectedCategory?._id !== c._id"
+  [class.p-button-primary]="selectedCategory?._id === c._id" >
+</button>
+
     </div>
 
     <!-- Subcategories -->
