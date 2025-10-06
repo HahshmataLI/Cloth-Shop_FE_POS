@@ -8,24 +8,99 @@
   --primary-color-hover: #2563eb; /* Darker shade for hover states */
   --primary-500: #3b82f6;         /* Match Tailwind blue-500 */
 }
+/* ✅ Base: keep your app consistent with PrimeNG/Tailwind theme */
 
-
-/* 📱 Mobile-only readability fix */
+/* 📱 Mobile View Enhancements Only */
 @media (max-width: 768px) {
-  body, input, select, textarea, button, label, span, p, div, th, td {
-    color: #1f2937 !important;   /* dark gray (almost black) */
-    font-size: 15px !important;  /* readable size */
+
+  /* Improve body padding and readability */
+  body {
+    background-color: #f9fafb !important; /* light gray background */
+    padding: 0.75rem !important;
   }
 
-  /* Dropdowns (Customer, Payment) */
-  select {
-    background-color: #fff !important;
-    color: #111 !important;
+  /* Header (menu bar) adjustments */
+  header, .p-menubar, .topbar {
+    border-radius: 0 0 12px 12px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
 
-  /* Placeholder visibility */
-  ::placeholder {
-    color: #6b7280 !important; /* gray-500 */
-    opacity: 1;
+  /* Cards, panels, dashboard boxes */
+  .p-card, .card, .dashboard-card {
+    border-radius: 12px !important;
+    padding: 0.9rem !important;
+    margin-bottom: 0.8rem !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* Tables — better spacing and borders */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th {
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    padding: 0.5rem;
+  }
+
+  td {
+    color: #1f2937;
+    padding: 0.6rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  /* Inputs and Selects — use theme style but improve touch area */
+  input.p-inputtext,
+  select.p-dropdown,
+  textarea.p-inputtextarea {
+    font-size: 15px !important;
+    padding: 0.6rem 0.8rem !important;
+    border-radius: 8px !important;
+  }
+
+  /* 🟦 Primary Button (use your existing theme color) */
+  .p-button-primary, button.p-button-primary, .p-button {
+    width: 100%;
+    background-color: var(--primary-color, #3b82f6) !important;
+    border: none !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 0.75rem !important;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .p-button-primary:hover, button.p-button-primary:hover {
+    background-color: var(--primary-color-dark, #2563eb) !important;
+    transform: translateY(-1px);
+  }
+
+  /* Dashboard numbers — center and clear spacing */
+  .stat-card, .dashboard-stat {
+    text-align: center;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .stat-card h2, .dashboard-stat h2 {
+    color: var(--primary-color, #3b82f6);
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .stat-card span, .dashboard-stat span {
+    color: #6b7280;
+    font-size: 0.9rem;
   }
 }

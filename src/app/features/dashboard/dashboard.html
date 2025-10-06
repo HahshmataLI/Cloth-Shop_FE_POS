@@ -42,6 +42,24 @@
   <p-card header="Low Stock Products" class="text-center">
     <h2 class="text-2xl font-bold text-red-600">{{ stats?.lowStockProducts }}</h2>
   </p-card>
+  <!-- Profits Section -->
+  <p-card header="Total Profit" class="text-center">
+    <h2 class="text-2xl font-bold text-green-700">
+      Rs {{ stats?.totalProfit | number }}
+    </h2>
+  </p-card>
+  
+  <p-card header="Today’s Profit" class="text-center">
+    <h2 class="text-2xl font-bold text-green-600">
+      Rs {{ stats?.todayProfit | number }}
+    </h2>
+  </p-card>
+  
+  <p-card header="This Month’s Profit" class="text-center">
+    <h2 class="text-2xl font-bold text-green-500">
+      Rs {{ stats?.monthProfit | number }}
+    </h2>
+  </p-card>
 </div>
 
 <!-- Charts + Tables -->
