@@ -28,6 +28,8 @@
       [loading]="loading"
       [paginator]="true"
       [rows]="rows"
+       [sortField]="'name'"    
+         [sortOrder]="1"    
       [first]="first"
       paginatorDropdownAppendTo="body"
       [rowsPerPageOptions]="[5,10,20]"
@@ -35,17 +37,17 @@
       class="w-full">
 
       <!-- Header -->
-      <ng-template pTemplate="header">
-        <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
-          <th>Name</th>
-          <th>SKU</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>Image</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </ng-template>
+       <ng-template pTemplate="header">
+    <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
+      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="sku">SKU <p-sortIcon field="sku"></p-sortIcon></th>
+      <th pSortableColumn="category.name">Category <p-sortIcon field="category.name"></p-sortIcon></th>
+      <th pSortableColumn="salePrice">Price <p-sortIcon field="salePrice"></p-sortIcon></th>
+      <th pSortableColumn="stockQuantity">Stock <p-sortIcon field="stockQuantity"></p-sortIcon></th>
+      <th>Image</th>
+      <th class="text-center">Actions</th>
+    </tr>
+  </ng-template>
 
       <!-- Body -->
       <ng-template pTemplate="body" let-prod>

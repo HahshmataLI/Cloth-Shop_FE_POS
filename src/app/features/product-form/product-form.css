@@ -1,0 +1,26 @@
+/* Force blue theme for PrimeNG dropdowns */
+::ng-deep .p-dropdown {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none;
+}
+
+/* Dropdown label text */
+::ng-deep .p-dropdown-label {
+  @apply text-gray-700;
+}
+
+/* Highlighted option in the panel */
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: #2563eb !important; /* Tailwind blue-600 */
+  color: white !important;
+}
+
+/* Hover state */
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+  background: #dbeafe !important; /* Tailwind blue-100 */
+  color: #2563eb !important;
+}
+
+/* Dropdown trigger (the chevron icon area) */
+::ng-deep .p-dropdown-trigger {
+  color: #2563eb !important;
+}

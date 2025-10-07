@@ -1,0 +1,25 @@
+/* === Force All PrimeNG Buttons to Blue Theme === */
+.p-button {
+  background: linear-gradient(to right, #2563eb, #4f46e5) !important; /* from-blue-600 to-indigo-500 */
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.p-button:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px);
+}
+
+/* For icon-only buttons */
+.p-button.p-button-icon-only {
+  background: linear-gradient(to right, #2563eb, #4f46e5) !important;
+  color: white !important;
+}
+
+/* Optional: red for delete buttons only */
+.p-button-danger,
+.p-button-danger:enabled:hover {
+  background: #dc2626 !important; /* red-600 */
+}

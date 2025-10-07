@@ -2,16 +2,17 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
-:root {
-  --primary-color: #2563eb; /* Tailwind blue-600 */
-  --primary-color-text: #ffffff;
+/* styles.css */
+::ng-deep .p-dropdown {
+  border: 1px solid #2563eb !important;
+  border-radius: 0.5rem;
+}
 
-  --highlight-bg: #eff6ff;
-  --highlight-text-color: #1e3a8a;
+::ng-deep .p-dropdown .p-dropdown-label {
+  color: #2563eb !important;
+}
 
-  --surface-ground: #f9fafb;
-  --surface-card: #ffffff;
-  --surface-border: #e5e7eb;
-  --text-color: #374151;
-  --text-color-secondary: #6b7280;
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: #2563eb !important;
+  color: #fff !important;
 }

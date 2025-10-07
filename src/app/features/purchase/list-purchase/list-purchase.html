@@ -29,6 +29,8 @@
       [loading]="loading"
       [paginator]="true"
       [rows]="rows"
+      [sortField]="'date'" 
+      [sortOrder]="-1"
       [first]="first"
       paginatorDropdownAppendTo="body"
       [rowsPerPageOptions]="[5,10,20]"
@@ -37,14 +39,14 @@
 
       <!-- Header -->
       <ng-template pTemplate="header">
-        <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
-          <th>Invoice</th>
-          <th>Supplier</th>
-          <th>Date</th>
-          <th>Grand Total</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </ng-template>
+      <tr class="bg-gradient-to-r from-blue-600 to-indigo-500 text-white">
+        <th pSortableColumn="invoice">Invoice <p-sortIcon field="invoice"></p-sortIcon></th>
+        <th pSortableColumn="supplier">Supplier <p-sortIcon field="supplier"></p-sortIcon></th>
+        <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+        <th pSortableColumn="grandTotal">Grand Total <p-sortIcon field="grandTotal"></p-sortIcon></th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </ng-template>
 
       <!-- Body -->
       <ng-template pTemplate="body" let-purchase>

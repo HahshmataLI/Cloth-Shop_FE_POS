@@ -29,23 +29,35 @@
       [paginator]="true"
       [rows]="rows"
       [first]="first"
+      [sortField]="'date'"    
+      [sortOrder]="-1" 
       paginatorDropdownAppendTo="body"
       [rowsPerPageOptions]="[5,10,20]"
       (onPage)="onPageChange($event)"
       class="w-full">
 
       <!-- Header -->
-      <ng-template pTemplate="header">
-        <tr class="bg-gradient-to-r from-green-500 to-emerald-600 text-white">
-          <th>Invoice #</th>
-          <th>Customer</th>
-          <th>Date</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </ng-template>
+    <ng-template pTemplate="header">
+    <tr class="bg-gradient-to-r from-green-500 to-emerald-600 text-white">
+      <th pSortableColumn="_id">
+        Invoice # <p-sortIcon field="_id"></p-sortIcon>
+      </th>
+      <th pSortableColumn="customer.name">
+        Customer <p-sortIcon field="customer.name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="date">
+        Date <p-sortIcon field="date"></p-sortIcon>
+      </th>
+      <th>Items</th>
+      <th pSortableColumn="grandTotal">
+        Total <p-sortIcon field="grandTotal"></p-sortIcon>
+      </th>
+      <th pSortableColumn="paymentMethod">
+        Status <p-sortIcon field="paymentMethod"></p-sortIcon>
+      </th>
+      <th class="text-center">Actions</th>
+    </tr>
+  </ng-template>
 
       <!-- Body -->
       <ng-template pTemplate="body" let-sale>
